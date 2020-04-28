@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>Start with Vue.js</title>
+</head>
+<style>
+a {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+</style>
+<body>
+    <div id="app">
+        <input type="text" placeholder="Enter search here..." v-model="querySearch" v-on:keyup.enter="seach">
+        <ul>
+            <li v-for="item in listResponse">
+                <a v-bind:href="item.html_url"> {{ item.name }} - {{ item.description }}</a>
+            </li>
+        </ul>
+    </div>
+</body>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            querySearch: '',
+            listResponse: [],
+        },
+        methods: {
+            seach() {
+                fetch(`https://api.github.com/search/repositories?q=${this.querySearch}`)
+                .then(response => response.json())
+                .then(json => this.listResponse = json.items)
+            }
+        }
+    })
+</script>
+</html>
